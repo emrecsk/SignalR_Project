@@ -23,5 +23,17 @@ namespace SignalR.Web.Hubs
         {
             await Clients.All.SendtoAllClientAsync(message);
         }
+        public async Task CallingByClient(string message)
+        {
+            await Clients.Caller.SendtoCallingClient(message);
+        }
+        public async Task SendingToOthers(string message)
+        {
+            await Clients.Others.SendtoOtherClients(message);
+        }
+        public async Task SendingToSpecific(string message, string connectionId)
+        {
+            await Clients.Client(connectionId).SendtoSpecificClient(message);
+        }
     }
 }
