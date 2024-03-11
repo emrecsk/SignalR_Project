@@ -7,5 +7,6 @@
         Task SendtoCallingClient(string message);
         Task SendtoOtherClients(string message);
         Task SendtoSpecificClient(string message);
+        Task SendtoGroup(string message);
     }
 }

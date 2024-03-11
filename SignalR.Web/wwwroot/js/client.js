@@ -41,6 +41,47 @@
 
     });
 
+    //Group Operations starts here
+
+    //refresh group list
+    let groupList = [];
+    function refreshGroupList() {
+        $('#currentGroupList').empty();
+        groupList.forEach(function (group) {
+            $('#currentGroupList').append(`<p>${group}</p>`);
+        });
+    }
+
+
+    //Join Group
+    $('#group-add-btn').on('click', function () {
+        const groupName = $('#group-select').val();
+        connection.invoke('JoinGroup', groupName).then(function () {
+            if (groupList.indexOf(groupName) === -1) {
+                groupList.push(groupName);
+                refreshGroupList();
+            }
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+    });
+
+    //Leave Group
+    $('#group-remove-btn').on('click', function () {
+        const groupName = $('#group-select').val();
+        connection.invoke('LeaveGroup', groupName).then(function () {
+            const index = groupList.indexOf(groupName);
+            if (index !== -1) {
+                groupList.splice(index, 1);
+                refreshGroupList();
+            }
+            }).catch(function (err) {
+            return console.error(err.toString());
+        });
+    });
+
+    //Group Operations ends here
+
     //subscription to the server events
 
     connection.on('SendtoAllClientAsync', function (message) {

@@ -35,5 +35,27 @@ namespace SignalR.Web.Hubs
         {
             await Clients.Client(connectionId).SendtoSpecificClient(message);
         }
+        public async Task SendingToGroup(string message, string groupName)
+        {
+            await Clients.Group(groupName).SendtoGroup(message);
+        }
+        public async Task JoinGroup(string groupName)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+
+            await Clients.Caller.SendtoCallingClient($"You are now in the group {groupName}.");
+                        
+            await Clients.Group(groupName).SendtoGroup($"{Context.ConnectionId} has joined the group {groupName}.");
+            //await Clients.Others.SendtoOtherClients($"{Context.ConnectionId} has joined the group {groupName}.");
+        }
+        public async Task LeaveGroup(string groupName)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+
+            await Clients.Caller.SendtoCallingClient($"You left the group {groupName}.");
+            
+            await Clients.Group(groupName).SendtoGroup($"{Context.ConnectionId} has left the group {groupName}.");
+            //await Clients.Others.SendtoOtherClients($"{Context.ConnectionId} has left the group {groupName}.");
+        }
     }
 }
